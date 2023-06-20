@@ -28,7 +28,13 @@ module floatingOperation #(
 
     wire expDiff [7:0];
 
-    small
+    smallAlu expDiff(
+        .numA(expA),
+        .numB(expB),
+        .out(expDiff)
+    );
+
+    
 
 
 
