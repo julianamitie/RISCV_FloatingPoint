@@ -26,7 +26,9 @@ module floatingOperation #(
     assign fracA = numA[22:0];
     assign fracB = numB[22:0];
 
-    
+    wire expDiff [7:0];
+
+    small
 
 
 
