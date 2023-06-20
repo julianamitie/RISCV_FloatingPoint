@@ -9,8 +9,8 @@ O processador deve ser capaz de realizar:
 - acionamento de *flags* de acordo com os resultados obtidos; 
 
 **Autoras**
-Bárbara Bueno @Buenobarbie
-Juliana Mitie @julianamitie
+- Bárbara Bueno @Buenobarbie
+- Juliana Mitie @julianamitie
 
 ## Como rodar o projeto? 
 
@@ -28,5 +28,5 @@ cd RISCV_FloatingPoint
 
 Utilize os comandos disponibilizados no arquivo: 
 ```
-
+testes.md
 ```
