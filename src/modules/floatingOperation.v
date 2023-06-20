@@ -11,6 +11,7 @@ module floatingOperation #(
     sign  | exponent   |    fraction
     1bit  |   8bits    |     23bits
     */
+    localparam bias = 127;
 
     wire expA [7:0], expB [7:0];
     wire fracA [22:0], fracB [22:0];
@@ -18,9 +19,18 @@ module floatingOperation #(
 
     assign signA = numA[31];
     assign signB = numB[31];
+
+    assign expA = numA[30:23];
+    assign expB = numB[30:23];
+
+    assign fracA = numA[22:0];
+    assign fracB = numB[22:0];
+
     
 
-    localparam bias = 127;
+
+
+
 
 
 endmodule
