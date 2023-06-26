@@ -24,4 +24,13 @@ iverilog -o norm ../src/modules/normalization.v ../src/testes/normalization_test
 vvp norm
 ```
 
+## SmallAlu
+
+```
+iverilog -o salu ../src/modules/smallALU.v ../src/testes/smallALU_test.v
+```
+```
+vvp salu
+
+
 

@@ -2,12 +2,12 @@
 module floatingOperation( 
     input [31:0] numA, // números A 
     input [31:0] numB, // números B 
-    input smallerExpSrc,
+    input smallerExpSrc, // 0: A for menor, 1: B for menor
     input [7:0] shiftRightQtt, // quantidade de casas a serem shiftadas p/ direita 
     input [1:0] operation, // 00: add, 01: sub, 10: mult
     input normalization_src, // 0: Alu, 1: Roundresult
     input shift_src, // 0: left, 1: right
-    output wire [7:0] expDiff, 
+    input [7:0] expDiff, 
     output wire [31:0] result,
     output wire carry 
     
@@ -48,9 +48,9 @@ module floatingOperation(
     );
 
     // Control Unit recebe o expDiff
-    // Se for positivo, expA > expB  : smallerExpSrc = 0
-    // Se for negativo, expA < expB  : smallerExpSrc = 1
-    // Se for 0, expA = exp          : smallerExpSrc = 0
+    // Se for positivo, expA > expB  : smallerExpSrc = 1
+    // Se for negativo, expA < expB  : smallerExpSrc = 0
+    // Se for 0, expA = exp          : smallerExpSrc = 1
 
     // shiftRightQtt será a diferença em módulo
     
@@ -63,7 +63,7 @@ module floatingOperation(
     // Multiplexer
     wire [22:0] fracToShift;
     wire [25:0] fracShifted;
-    assign fracToShift = smallerExpSrc ? fracA : fracB;
+    assign fracToShift = smallerExpSrc ? fracB : fracA;
     
     // Shifting
     shiftRight shift(
@@ -74,7 +74,7 @@ module floatingOperation(
 
     // Muliplexer big alu num2
     wire [22:0] num2;
-    assign num2 = smallerExpSrc ? fracB : fracA;
+    assign num2 = smallerExpSrc ? fracA : fracB;
 
     wire [25:0] bigAluResult;
 

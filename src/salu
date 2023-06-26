@@ -1,0 +1,58 @@
+#! /opt/homebrew/Cellar/icarus-verilog/11.0/bin/vvp
+:ivl_version "11.0 (stable)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision - 12;
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/11.0/lib/ivl/system.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/11.0/lib/ivl/vhdl_sys.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/11.0/lib/ivl/vhdl_textio.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/11.0/lib/ivl/v2005_math.vpi";
+:vpi_module "/opt/homebrew/Cellar/icarus-verilog/11.0/lib/ivl/va_math.vpi";
+S_0x150704db0 .scope module, "smallALU_test" "smallALU_test" 2 4;
+ .timescale -12 -12;
+P_0x150705420 .param/l "N" 0 2 4, +C4<00000000000000000000000001000000>;
+v0x150719670_0 .net "exp", 7 0, L_0x1507198a0;  1 drivers
+v0x150719720_0 .var "exp1", 7 0;
+v0x1507197d0_0 .var "exp2", 7 0;
+S_0x150704f20 .scope module, "uut" "smallAlu" 2 10, 3 2 0, S_0x150704db0;
+ .timescale 0 0;
+    .port_info 0 /INPUT 8 "exp1";
+    .port_info 1 /INPUT 8 "exp2";
+    .port_info 2 /OUTPUT 8 "exp";
+v0x1507095a0_0 .net "exp", 7 0, L_0x1507198a0;  alias, 1 drivers
+v0x1507194b0_0 .net "exp1", 7 0, v0x150719720_0;  1 drivers
+v0x150719560_0 .net "exp2", 7 0, v0x1507197d0_0;  1 drivers
+L_0x1507198a0 .arith/sub 8, v0x150719720_0, v0x1507197d0_0;
+    .scope S_0x150704db0;
+T_0 ;
+    %pushi/vec4 2, 0, 8;
+    %store/vec4 v0x150719720_0, 0, 8;
+    %pushi/vec4 1, 0, 8;
+    %store/vec4 v0x1507197d0_0, 0, 8;
+    %vpi_call 2 21 "$monitor", "exp1 = %B\012 exp2 = %B\012 exp = %B\012", v0x150719720_0, v0x1507197d0_0, v0x150719670_0 {0 0 0};
+    %delay 100, 0;
+    %pushi/vec4 2, 0, 8;
+    %store/vec4 v0x150719720_0, 0, 8;
+    %pushi/vec4 2, 0, 8;
+    %store/vec4 v0x1507197d0_0, 0, 8;
+    %vpi_call 2 27 "$monitor", "exp1 = %B\012 exp2 = %B\012 exp = %B\012", v0x150719720_0, v0x1507197d0_0, v0x150719670_0 {0 0 0};
+    %delay 100, 0;
+    %pushi/vec4 1, 0, 8;
+    %store/vec4 v0x150719720_0, 0, 8;
+    %pushi/vec4 2, 0, 8;
+    %store/vec4 v0x1507197d0_0, 0, 8;
+    %vpi_call 2 33 "$monitor", "exp1 = %B\012 exp2 = %B\012 exp = %B\012", v0x150719720_0, v0x1507197d0_0, v0x150719670_0 {0 0 0};
+    %delay 100, 0;
+    %pushi/vec4 0, 0, 8;
+    %store/vec4 v0x150719720_0, 0, 8;
+    %pushi/vec4 2, 0, 8;
+    %store/vec4 v0x1507197d0_0, 0, 8;
+    %vpi_call 2 39 "$monitor", "exp1 = %B\012 exp2 = %B\012 exp = %B\012", v0x150719720_0, v0x1507197d0_0, v0x150719670_0 {0 0 0};
+    %delay 100, 0;
+    %end;
+    .thread T_0;
+# The file index is used to find the file name in the following table.
+:file_names 4;
+    "N/A";
+    "<interactive>";
+    "../src/testes/smallALU_test.v";
+    "../src/modules/smallALU.v";
