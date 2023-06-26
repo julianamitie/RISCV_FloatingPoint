@@ -4,7 +4,7 @@
 module shiftRight_test #(parameter N = 64) ();
     reg [22:0] num;
     reg [7:0] shiftRightQtt;     
-    wire [22:0] result;     
+    wire [25:0] result;     
 
     /* instanciação da unit under test */
     shiftRight uut(

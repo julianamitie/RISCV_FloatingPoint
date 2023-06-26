@@ -1,15 +1,15 @@
 /* descrição */
-module floatingOperation #(
-    parameter FRACTION = 23,
-    parameter EXPONENT = 8,
-) ( 
-    input [31:0] numA, [31:0] numB, // números A e B 
+module floatingOperation( 
+    input [31:0] numA, // números A 
+    input [31:0] numB, // números B 
     input smallerExpSrc,
     input [7:0] shiftRightQtt, // quantidade de casas a serem shiftadas p/ direita 
     input [1:0] operation, // 00: add, 01: sub, 10: mult
-    input normalization_src,
+    input normalization_src, // 0: Alu, 1: Roundresult
+    input shift_src, // 0: left, 1: right
     output wire [7:0] expDiff, 
-    output wire [31:0] result
+    output wire [31:0] result,
+    output wire carry 
     
 );
     /*
@@ -24,9 +24,12 @@ module floatingOperation #(
     2^-1 = 126
     */
 
-    wire [7:0] expA , [7:0] expB ; // expoente das entradas
-    wire [22:0] fracA , [22:0] fracB ; // fração das entradas 
-    wire signA, signB; // sinais das entradas
+    wire [7:0] expA;
+    wire [7:0] expB; // expoente das entradas
+    wire [22:0] fracA;
+    wire [22:0] fracB; // fração das entradas 
+    wire signA;
+    wire signB; // sinais das entradas
 
     assign signA = numA[31]; // sinal de A
     assign signB = numB[31]; // sinal de B
@@ -38,10 +41,10 @@ module floatingOperation #(
     assign fracB = numB[22:0]; // fração B
 
     // small ALU
-    smallAlu expDiff(
-        .numA(expA),
-        .numB(expB),
-        .out(expDiff)
+    smallAlu expDiffCalc(
+        .exp1(expA),
+        .exp2(expB),
+        .exp(expDiff)
     );
 
     // Control Unit recebe o expDiff
@@ -59,7 +62,7 @@ module floatingOperation #(
     // Shift Fraction with smaller exponent
     // Multiplexer
     wire [22:0] fracToShift;
-    wire [22:0] fracShifted;
+    wire [25:0] fracShifted;
     assign fracToShift = smallerExpSrc ? fracA : fracB;
     
     // Shifting
@@ -70,57 +73,56 @@ module floatingOperation #(
     );
 
     // Muliplexer big alu num2
-    wire [31:0] num2;
+    wire [22:0] num2;
     assign num2 = smallerExpSrc ? fracB : fracA;
 
-    wire [22:0] bigAluResult;
+    wire [25:0] bigAluResult;
 
     // Big alu
-    bigAlu bigAlu(
+    bigALU bigAlu(
         .input_a(fracShifted),
-        .input_b(num2),
+        .sign_a(signA),
+        .input_b({num2, 3'b000}),
+        .sign_b(signB),
         .operation(operation),
-        .result(bigAluResult)
+        .result(bigAluResult),
+        .carry(carry)
     );
-
 
     //Normalization multiplexer
     // 0 : original  1: rounded
     wire [22:0] fractToNorm;
-    assign fractToNorm = normalization_src ? fractionRounded : bigAluResult;
+    assign fractToNorm = normalization_src ? bigAluResult : fractionRounded;
 
     wire [7:0] expToNorm;
     assign expToNorm = normalization_src ? expRounded : smallerExp;
-
 
     // Normalization
     wire [22:0] fractionNorm;
     wire [7:0] expNorm;
 
-
     normalization normalization(
+        .shift_src(shift_src),
         .fraction(fractToNorm),
         .exp(expToNorm),
         .fractionNorm(fractionNorm),
         .expNorm(expNorm)
     );
 
-
     // Rouding
     wire [22:0] fractionRounded;
     wire [7:0] expRounded;
 
-    rouding rounding(
+    rounding rounding (
         .fraction(fractionNorm),
-        .exp(expNorm)
+        .exp(expNorm),
         .fractionRounded(fractionRounded),
         .expRounded(expRounded)
     );
 
     // Final result
     // Verificar qual o sinal
-    assign result = {signA, expNorm, factionNorm};
+    assign result = {signA, expNorm, fractionNorm};
     
-
 
 endmodule
