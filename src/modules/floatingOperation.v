@@ -7,6 +7,7 @@ module floatingOperation(
     input [1:0] operation, // 00: add, 01: sub, 10: mult
     input normalization_src, // 0: Alu, 1: Roundresult
     input shift_src, // 0: left, 1: right
+    input shift,
     output [7:0] expDiff, 
     output [26:0] fracResult,
     output wire [31:0] result,
@@ -67,7 +68,7 @@ module floatingOperation(
     assign fracToShift = smallerExpSrc ? fracB : fracA;
     
     // Shifting
-    shiftRight shift(
+    shiftRight shiftRight(
         .num(fracToShift),
         .shiftRightQtt(shiftRightQtt),
         .result(fracShifted)
@@ -94,6 +95,7 @@ module floatingOperation(
     // 0 : original  1: rounded
     wire [26:0] fractToNorm;
     assign fractToNorm = normalization_src ? bigAluResult : fractionRounded;
+
     assign fracResult = fractToNorm;
 
     wire [7:0] expToNorm;
@@ -104,16 +106,21 @@ module floatingOperation(
     wire [7:0] expNorm;
 
     normalization normalization(
+        .shift(shift),
         .shift_src(shift_src),
-        .fraction(fractToNorm),
         .exp(expToNorm),
-        .fractionNorm(fractionNorm),
-        .expNorm(expNorm)
+        .fraction(fractToNorm),
+        .expNorm(expNorm),
+        .fractionNorm(fractionNorm)
     );
 
     // Rouding
     wire [26:0] fractionRounded;
     wire [7:0] expRounded;
+
+        always @(fractionNorm) begin
+        $display("\n FractionNorm = %b", fractionNorm);
+    end 
 
     rounding rounding (
         .fraction(fractionNorm),

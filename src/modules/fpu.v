@@ -13,6 +13,7 @@ wire [7:0] shiftRightQtt;
 wire [7:0] expDiff;
 wire carry;
 wire [26:0] fracResult;
+wire shift;
 
 floatingOperation flop(
     .numA(A),
@@ -22,6 +23,7 @@ floatingOperation flop(
     .operation(op),
     .normalization_src(normalization_src),
     .shift_src(shift_src),
+    .shift(shift),
     .expDiff(expDiff),
     .fracResult(fracResult),
     .result(R),
@@ -40,6 +42,7 @@ ucFloat ucf(
     .smallerExpSrc(smallerExpSrc), 
     .normalization_src(normalization_src), 
     .shift_src(shift_src),
+    .shift(shift),
     .done(done)
 ); 
 

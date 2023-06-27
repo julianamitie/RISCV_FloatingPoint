@@ -9,6 +9,7 @@ module ucFloat (
     output reg smallerExpSrc, 
     output reg normalization_src,
     output reg shift_src,
+    output reg shift,
     output reg done
 );
 
@@ -23,7 +24,6 @@ module ucFloat (
     reg [2:0] state, next_state;
 
     always @(posedge clk, negedge rst_n) begin
-        $display("state: %d \n", state);
         if (!rst_n) begin
             state <= state0;
         end
@@ -35,15 +35,17 @@ module ucFloat (
     always @(state) begin
         case (state) 
             state0: begin
-                $display("state 0 \n");
-                $display("start: %d \n", start);
+                $display("######## state 0 ######## \n");
                 done = 0;
+                shift = 0;
                 if(start == 1) next_state = state1; 
                 else next_state = state0;
             end 
             
             state1: begin
-                $display("state 1 \n");
+                normalization_src = 1; // normaliza ALU
+                $display("######## state 1 ########\n");
+                shift = 0;
                 if(expDiff[7] == 1) begin
                     smallerExpSrc = 0;
                     shiftRightQtt = ~expDiff[6:0] + 1;
@@ -56,63 +58,66 @@ module ucFloat (
             end 
             
             state2: begin
-                $display("state 2 \n");
+                $display("######## state 2 ########\n");
+                shift = 0;
                 // Somar as frações
-                normalization_src = 1; // normaliza ALU
+                
                 next_state = state3;
             end 
 
             state3:begin
-                $display("state 3 \n");
-                $display("carry: %d \n", carry);
-                $display("fracResult: %B \n", fracResult);
+                $display("######## state 3 ########\n");
                 if(carry) begin
+                    $display("-> Há Carry");
+                    shift = 1;
                     shift_src = 1;
                     next_state = state3;
-                    $display("Carry");
                 end
                 else begin
                     if(fracResult[26] == 0) begin
+                        $display("-> Não normalizado");
+                        shift = 1;
                         shift_src = 0;
                         next_state = state3;
-                        $display("Não normalizado");
                     end
                     else begin
                         // Se o resultado da alu estiver normalizado
                         // Normalizar o resultado do round
+                        shift = 0;
                         if(normalization_src == 1) begin
-                            normalization_src = 0;
+                            
                             next_state = state4;
-                            $display("normalizado src1");
-                            $display("next_state: %b \n", next_state);
+                            $display("-> Normalizado com src = 1");
 
                         end
                         else begin
                             normalization_src = 1;
                             next_state = state5;
-                            $display("normalizado src0");
+                            $display("-> Normalizado com src = 0");
                         end
                     end
                 end 
             end 
 
             state4: begin
-                $display("state 4 \n");
-                
+                $display("######## state 4 ######## \n");
+                normalization_src = 0;
+                shift = 0;
                 // Arredondamento
                 next_state = state3;
             end 
 
             state5: begin
-                $display("state 5 \n");
+                $display("######## state 5 ######## \n");
                 done = 1;
+                shift = 0;
                 if(start == 1) next_state = state5; 
                 else next_state = state0; 
                 
             end 
             
             default: begin
-                $display("default \n");
+                $display("######## default ######## \n");
                 next_state = state0;
             end
 

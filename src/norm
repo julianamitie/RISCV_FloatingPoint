@@ -1,75 +1,81 @@
-#! /opt/homebrew/Cellar/icarus-verilog/11.0/bin/vvp
-:ivl_version "11.0 (stable)";
+#! /usr/bin/vvp
+:ivl_version "10.3 (stable)";
 :ivl_delay_selection "TYPICAL";
 :vpi_time_precision - 12;
-:vpi_module "/opt/homebrew/Cellar/icarus-verilog/11.0/lib/ivl/system.vpi";
-:vpi_module "/opt/homebrew/Cellar/icarus-verilog/11.0/lib/ivl/vhdl_sys.vpi";
-:vpi_module "/opt/homebrew/Cellar/icarus-verilog/11.0/lib/ivl/vhdl_textio.vpi";
-:vpi_module "/opt/homebrew/Cellar/icarus-verilog/11.0/lib/ivl/v2005_math.vpi";
-:vpi_module "/opt/homebrew/Cellar/icarus-verilog/11.0/lib/ivl/va_math.vpi";
-S_0x122405c80 .scope module, "normalization_test" "normalization_test" 2 4;
+:vpi_module "system";
+:vpi_module "vhdl_sys";
+:vpi_module "v2005_math";
+:vpi_module "va_math";
+S_0x55f26b37c250 .scope module, "normalization_test" "normalization_test" 2 4;
  .timescale -12 -12;
-P_0x1224061f0 .param/l "N" 0 2 4, +C4<00000000000000000000000001000000>;
-L_0x118050130 .functor BUFT 1, C4<0000>, C4<0>, C4<0>, C4<0>;
-v0x122419c10_0 .net *"_ivl_3", 3 0, L_0x118050130;  1 drivers
-v0x122419ca0_0 .var "exp", 7 0;
-v0x122419d30_0 .net "expNorm", 7 0, L_0x12241a840;  1 drivers
-v0x122419e00_0 .var "fraction", 22 0;
-v0x122419e90_0 .net "fractionNorm", 22 0, L_0x12241aa80;  1 drivers
-v0x122419f70_0 .var "shift_src", 0 0;
-L_0x12241a960 .concat [ 23 4 0 0], v0x122419e00_0, L_0x118050130;
-L_0x12241aa80 .part L_0x12241a4a0, 0, 23;
-S_0x122409320 .scope module, "uut" "normalization" 2 12, 3 1 0, S_0x122405c80;
+P_0x55f26b37c3d0 .param/l "N" 0 2 4, +C4<00000000000000000000000001000000>;
+v0x55f26b3a3210_0 .var "exp", 7 0;
+v0x55f26b3a32f0_0 .net "expNorm", 7 0, L_0x55f26b3a4270;  1 drivers
+v0x55f26b3a3390_0 .var "fraction", 26 0;
+v0x55f26b3a3490_0 .net "fractionNorm", 26 0, L_0x55f26b3a4130;  1 drivers
+v0x55f26b3a3560_0 .var "shift", 0 0;
+v0x55f26b3a3600_0 .var "shift_src", 0 0;
+S_0x55f26b38b990 .scope module, "uut" "normalization" 2 13, 3 1 0, S_0x55f26b37c250;
  .timescale 0 0;
-    .port_info 0 /INPUT 1 "shift_src";
-    .port_info 1 /INPUT 8 "exp";
-    .port_info 2 /INPUT 27 "fraction";
-    .port_info 3 /OUTPUT 8 "expNorm";
-    .port_info 4 /OUTPUT 27 "fractionNorm";
-v0x122409260_0 .net *"_ivl_0", 26 0, L_0x12241a100;  1 drivers
-L_0x118050058 .functor BUFT 1, C4<0>, C4<0>, C4<0>, C4<0>;
-v0x122419170_0 .net *"_ivl_10", 0 0, L_0x118050058;  1 drivers
-L_0x1180500a0 .functor BUFT 1, C4<00000001>, C4<0>, C4<0>, C4<0>;
-v0x122419210_0 .net/2u *"_ivl_14", 7 0, L_0x1180500a0;  1 drivers
-v0x1224192c0_0 .net *"_ivl_16", 7 0, L_0x12241a600;  1 drivers
-L_0x1180500e8 .functor BUFT 1, C4<00000001>, C4<0>, C4<0>, C4<0>;
-v0x122419370_0 .net/2u *"_ivl_18", 7 0, L_0x1180500e8;  1 drivers
-v0x122419460_0 .net *"_ivl_2", 25 0, L_0x12241a000;  1 drivers
-v0x122419510_0 .net *"_ivl_20", 7 0, L_0x12241a740;  1 drivers
-L_0x118050010 .functor BUFT 1, C4<0>, C4<0>, C4<0>, C4<0>;
-v0x1224195c0_0 .net *"_ivl_4", 0 0, L_0x118050010;  1 drivers
-v0x122419670_0 .net *"_ivl_6", 26 0, L_0x12241a340;  1 drivers
-v0x122419780_0 .net *"_ivl_8", 25 0, L_0x12241a260;  1 drivers
-v0x122419830_0 .net "exp", 7 0, v0x122419ca0_0;  1 drivers
-v0x1224198e0_0 .net "expNorm", 7 0, L_0x12241a840;  alias, 1 drivers
-v0x122419990_0 .net "fraction", 26 0, L_0x12241a960;  1 drivers
-v0x122419a40_0 .net "fractionNorm", 26 0, L_0x12241a4a0;  1 drivers
-v0x122419af0_0 .net "shift_src", 0 0, v0x122419f70_0;  1 drivers
-L_0x12241a000 .part L_0x12241a960, 1, 26;
-L_0x12241a100 .concat [ 26 1 0 0], L_0x12241a000, L_0x118050010;
-L_0x12241a260 .part L_0x12241a960, 0, 26;
-L_0x12241a340 .concat [ 1 26 0 0], L_0x118050058, L_0x12241a260;
-L_0x12241a4a0 .functor MUXZ 27, L_0x12241a340, L_0x12241a100, v0x122419f70_0, C4<>;
-L_0x12241a600 .arith/sum 8, v0x122419ca0_0, L_0x1180500a0;
-L_0x12241a740 .arith/sub 8, v0x122419ca0_0, L_0x1180500e8;
-L_0x12241a840 .functor MUXZ 8, L_0x12241a740, L_0x12241a600, v0x122419f70_0, C4<>;
-    .scope S_0x122405c80;
+    .port_info 0 /INPUT 1 "shift"
+    .port_info 1 /INPUT 1 "shift_src"
+    .port_info 2 /INPUT 8 "exp"
+    .port_info 3 /INPUT 27 "fraction"
+    .port_info 4 /OUTPUT 8 "expNorm"
+    .port_info 5 /OUTPUT 27 "fractionNorm"
+v0x55f26b38bc00_0 .net *"_s0", 26 0, L_0x55f26b3a37f0;  1 drivers
+L_0x7fe74a3f0060 .functor BUFT 1, C4<0>, C4<0>, C4<0>, C4<0>;
+v0x55f26b3a2280_0 .net *"_s10", 0 0, L_0x7fe74a3f0060;  1 drivers
+L_0x7fe74a3f00a8 .functor BUFT 1, C4<00000001>, C4<0>, C4<0>, C4<0>;
+v0x55f26b3a2360_0 .net/2u *"_s14", 7 0, L_0x7fe74a3f00a8;  1 drivers
+v0x55f26b3a2420_0 .net *"_s16", 7 0, L_0x55f26b3a3d30;  1 drivers
+L_0x7fe74a3f00f0 .functor BUFT 1, C4<00000001>, C4<0>, C4<0>, C4<0>;
+v0x55f26b3a2500_0 .net/2u *"_s18", 7 0, L_0x7fe74a3f00f0;  1 drivers
+v0x55f26b3a2630_0 .net *"_s2", 25 0, L_0x55f26b3a36d0;  1 drivers
+v0x55f26b3a2710_0 .net *"_s20", 7 0, L_0x55f26b3a3eb0;  1 drivers
+L_0x7fe74a3f0018 .functor BUFT 1, C4<0>, C4<0>, C4<0>, C4<0>;
+v0x55f26b3a27f0_0 .net *"_s4", 0 0, L_0x7fe74a3f0018;  1 drivers
+v0x55f26b3a28d0_0 .net *"_s6", 26 0, L_0x55f26b3a3a00;  1 drivers
+v0x55f26b3a29b0_0 .net *"_s8", 25 0, L_0x55f26b3a3960;  1 drivers
+v0x55f26b3a2a90_0 .net "aux_expNorm", 7 0, L_0x55f26b3a3fa0;  1 drivers
+v0x55f26b3a2b70_0 .net "aux_fractionNorm", 26 0, L_0x55f26b3a3ba0;  1 drivers
+v0x55f26b3a2c50_0 .net "exp", 7 0, v0x55f26b3a3210_0;  1 drivers
+v0x55f26b3a2d30_0 .net "expNorm", 7 0, L_0x55f26b3a4270;  alias, 1 drivers
+v0x55f26b3a2e10_0 .net "fraction", 26 0, v0x55f26b3a3390_0;  1 drivers
+v0x55f26b3a2ef0_0 .net "fractionNorm", 26 0, L_0x55f26b3a4130;  alias, 1 drivers
+v0x55f26b3a2fd0_0 .net "shift", 0 0, v0x55f26b3a3560_0;  1 drivers
+v0x55f26b3a3090_0 .net "shift_src", 0 0, v0x55f26b3a3600_0;  1 drivers
+L_0x55f26b3a36d0 .part v0x55f26b3a3390_0, 1, 26;
+L_0x55f26b3a37f0 .concat [ 26 1 0 0], L_0x55f26b3a36d0, L_0x7fe74a3f0018;
+L_0x55f26b3a3960 .part v0x55f26b3a3390_0, 0, 26;
+L_0x55f26b3a3a00 .concat [ 1 26 0 0], L_0x7fe74a3f0060, L_0x55f26b3a3960;
+L_0x55f26b3a3ba0 .functor MUXZ 27, L_0x55f26b3a3a00, L_0x55f26b3a37f0, v0x55f26b3a3600_0, C4<>;
+L_0x55f26b3a3d30 .arith/sum 8, v0x55f26b3a3210_0, L_0x7fe74a3f00a8;
+L_0x55f26b3a3eb0 .arith/sub 8, v0x55f26b3a3210_0, L_0x7fe74a3f00f0;
+L_0x55f26b3a3fa0 .functor MUXZ 8, L_0x55f26b3a3eb0, L_0x55f26b3a3d30, v0x55f26b3a3600_0, C4<>;
+L_0x55f26b3a4130 .functor MUXZ 27, v0x55f26b3a3390_0, L_0x55f26b3a3ba0, v0x55f26b3a3560_0, C4<>;
+L_0x55f26b3a4270 .functor MUXZ 8, v0x55f26b3a3210_0, L_0x55f26b3a3fa0, v0x55f26b3a3560_0, C4<>;
+    .scope S_0x55f26b37c250;
 T_0 ;
-    %pushi/vec4 1048576, 0, 23;
-    %store/vec4 v0x122419e00_0, 0, 23;
+    %pushi/vec4 16777216, 0, 27;
+    %store/vec4 v0x55f26b3a3390_0, 0, 27;
     %pushi/vec4 192, 0, 8;
-    %store/vec4 v0x122419ca0_0, 0, 8;
+    %store/vec4 v0x55f26b3a3210_0, 0, 8;
     %pushi/vec4 0, 0, 1;
-    %store/vec4 v0x122419f70_0, 0, 1;
-    %vpi_call 2 28 "$monitor", "fraction = %b, exp = %b, fractionNorm = %b, expNorm = %b", v0x122419e00_0, v0x122419ca0_0, v0x122419e90_0, v0x122419d30_0 {0 0 0};
-    %delay 100, 0;
-    %pushi/vec4 1048576, 0, 23;
-    %store/vec4 v0x122419e00_0, 0, 23;
-    %pushi/vec4 192, 0, 8;
-    %store/vec4 v0x122419ca0_0, 0, 8;
+    %store/vec4 v0x55f26b3a3600_0, 0, 1;
     %pushi/vec4 1, 0, 1;
-    %store/vec4 v0x122419f70_0, 0, 1;
-    %vpi_call 2 36 "$monitor", "fraction = %b, exp = %b, fractionNorm = %b, expNorm = %b", v0x122419e00_0, v0x122419ca0_0, v0x122419e90_0, v0x122419d30_0 {0 0 0};
+    %store/vec4 v0x55f26b3a3560_0, 0, 1;
+    %vpi_call 2 31 "$monitor", "fraction = %b, exp = %b, fractionNorm = %b, expNorm = %b", v0x55f26b3a3390_0, v0x55f26b3a3210_0, v0x55f26b3a3490_0, v0x55f26b3a32f0_0 {0 0 0};
+    %delay 100, 0;
+    %pushi/vec4 16777216, 0, 27;
+    %store/vec4 v0x55f26b3a3390_0, 0, 27;
+    %pushi/vec4 192, 0, 8;
+    %store/vec4 v0x55f26b3a3210_0, 0, 8;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x55f26b3a3600_0, 0, 1;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x55f26b3a3560_0, 0, 1;
+    %vpi_call 2 40 "$monitor", "fraction = %b, exp = %b, fractionNorm = %b, expNorm = %b", v0x55f26b3a3390_0, v0x55f26b3a3210_0, v0x55f26b3a3490_0, v0x55f26b3a32f0_0 {0 0 0};
     %delay 100, 0;
     %end;
     .thread T_0;
