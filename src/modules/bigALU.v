@@ -1,11 +1,12 @@
 /* operações aritméticas ADD, SUB, MUL */
 module bigALU(
-    input [25:0] input_a, // número A
+    input [26:0] input_a, // número A
     input sign_a, // sinal do número A
-    input [25:0] input_b, // número B
+    input [26:0] input_b, // número B
     input sign_b, // sinal do número B
     input [1:0] operation, // operação a ser realizada 
-    output [25:0] result, // resultado 
+    output [26:0] result, // resultado 
+    // output sign_result,
     output carry
 );
 
@@ -13,7 +14,7 @@ module bigALU(
     localparam SUB = 2'b01; // subtração
     localparam MUL = 2'b10; // multiplicação
 
-    reg [26:0] aux;
+    reg [27:0] aux;
     
     always @ (operation) begin 
         case(operation)
@@ -24,7 +25,8 @@ module bigALU(
         endcase
     end
 
-    assign carry = aux[26];
-    assign result = aux[25:0];
+    assign carry = aux[27];
+    assign result = aux[26:0];
+   // assign sign_result = aux[]
 
 endmodule

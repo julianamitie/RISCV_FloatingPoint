@@ -1,9 +1,9 @@
 module normalization(
     input shift_src, // 0 : left  1: right
     input [7:0] exp,
-    input [22:0] fraction,
+    input [26:0] fraction,
     output reg [7:0] expNorm,
-    output reg [25:0] fractionNorm
+    output reg [26:0] fractionNorm
 );
     
     // ShiftLeft enquanto o bit mais significativo da fração não for 1

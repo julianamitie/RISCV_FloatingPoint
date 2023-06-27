@@ -7,7 +7,8 @@ module floatingOperation(
     input [1:0] operation, // 00: add, 01: sub, 10: mult
     input normalization_src, // 0: Alu, 1: Roundresult
     input shift_src, // 0: left, 1: right
-    input [7:0] expDiff, 
+    output [7:0] expDiff, 
+    output [26:0] fracResult,
     output wire [31:0] result,
     output wire carry 
     
@@ -62,7 +63,7 @@ module floatingOperation(
     // Shift Fraction with smaller exponent
     // Multiplexer
     wire [22:0] fracToShift;
-    wire [25:0] fracShifted;
+    wire [26:0] fracShifted;
     assign fracToShift = smallerExpSrc ? fracB : fracA;
     
     // Shifting
@@ -76,13 +77,13 @@ module floatingOperation(
     wire [22:0] num2;
     assign num2 = smallerExpSrc ? fracA : fracB;
 
-    wire [25:0] bigAluResult;
+    wire [26:0] bigAluResult;
 
     // Big alu
     bigALU bigAlu(
         .input_a(fracShifted),
         .sign_a(signA),
-        .input_b({num2, 3'b000}),
+        .input_b({1'b1, num2, 3'b000}),
         .sign_b(signB),
         .operation(operation),
         .result(bigAluResult),
@@ -91,14 +92,15 @@ module floatingOperation(
 
     //Normalization multiplexer
     // 0 : original  1: rounded
-    wire [22:0] fractToNorm;
+    wire [26:0] fractToNorm;
     assign fractToNorm = normalization_src ? bigAluResult : fractionRounded;
+    assign fracResult = fractToNorm;
 
     wire [7:0] expToNorm;
-    assign expToNorm = normalization_src ? expRounded : smallerExp;
+    assign expToNorm = normalization_src ? smallerExp : expRounded;
 
     // Normalization
-    wire [22:0] fractionNorm;
+    wire [26:0] fractionNorm;
     wire [7:0] expNorm;
 
     normalization normalization(
@@ -110,7 +112,7 @@ module floatingOperation(
     );
 
     // Rouding
-    wire [22:0] fractionRounded;
+    wire [26:0] fractionRounded;
     wire [7:0] expRounded;
 
     rounding rounding (
@@ -121,7 +123,7 @@ module floatingOperation(
     );
 
     // Final result
-    // Verificar qual o sinal
+    // Verificar qual o sinal -> colocar como output da alu
     assign result = {signA, expNorm, fractionNorm};
     
 
