@@ -16,7 +16,7 @@ module bigALU(
 
     reg [27:0] aux;
     
-    always @ (operation) begin 
+    always @ (*) begin 
         case(operation)
             ADD: aux <= input_a + input_b;
             SUB: aux <= input_a - input_b;

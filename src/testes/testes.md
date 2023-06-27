@@ -38,6 +38,16 @@ iverilog -o salu ../src/modules/smallALU.v ../src/testes/smallALU_test.v
 ```
 ```
 vvp salu
+```
+
+## BigAlu
+
+```
+iverilog -o balu ../src/modules/bigALU.v ../src/testes/bigALU_test.v
+```
+```
+vvp balu
+```
 
 
 

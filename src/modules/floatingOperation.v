@@ -124,7 +124,7 @@ module floatingOperation(
 
     // Final result
     // Verificar qual o sinal -> colocar como output da alu
-    assign result = {signA, expNorm, fractionNorm};
+    assign result = {signA, expNorm, fractionNorm[26:4]};
     
 
 endmodule

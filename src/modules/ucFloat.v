@@ -18,7 +18,7 @@ module ucFloat (
                     state2 = 3'b010, // Somar as frações
                     state3 = 3'b011, // Analisar o resultado da soma (carry) e enviar o normalization_src e o shift_src
                     state4 = 3'b100, // Arredondamento
-                    state5 = 3'b110; // Fim: Exibir o resultado (done <= 1)
+                    state5 = 3'b101; // Fim: Exibir o resultado (done <= 1)
 
     reg [2:0] state, next_state;
 
@@ -58,7 +58,7 @@ module ucFloat (
             state2: begin
                 $display("state 2 \n");
                 // Somar as frações
-                normalization_src = 0; // normaliza ALU
+                normalization_src = 1; // normaliza ALU
                 next_state = state3;
             end 
 
@@ -69,22 +69,28 @@ module ucFloat (
                 if(carry) begin
                     shift_src = 1;
                     next_state = state3;
+                    $display("Carry");
                 end
                 else begin
                     if(fracResult[26] == 0) begin
                         shift_src = 0;
                         next_state = state3;
+                        $display("Não normalizado");
                     end
                     else begin
                         // Se o resultado da alu estiver normalizado
                         // Normalizar o resultado do round
-                        if(normalization_src == 0) begin
-                            normalization_src = 1;
+                        if(normalization_src == 1) begin
+                            normalization_src = 0;
                             next_state = state4;
+                            $display("normalizado src1");
+                            $display("next_state: %b \n", next_state);
+
                         end
                         else begin
-                            normalization_src = 0;
+                            normalization_src = 1;
                             next_state = state5;
+                            $display("normalizado src0");
                         end
                     end
                 end 
@@ -92,6 +98,7 @@ module ucFloat (
 
             state4: begin
                 $display("state 4 \n");
+                
                 // Arredondamento
                 next_state = state3;
             end 
