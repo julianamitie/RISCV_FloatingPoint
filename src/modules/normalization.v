@@ -3,8 +3,8 @@ module normalization(
     input shift_src, // 0 : left  1: right
     input [7:0] exp,
     input [26:0] fraction,
-    output [7:0] expNorm,
-    output [26:0] fractionNorm
+    output reg [7:0] expNorm,
+    output reg [26:0] fractionNorm
 );
 // always @(*) begin
 
@@ -19,8 +19,17 @@ module normalization(
     assign aux_fractionNorm = shift_src ? fraction >> 1 : fraction << 1;
     assign aux_expNorm = shift_src ? exp + 1 : exp - 1;
 
-    assign fractionNorm = shift ? aux_fractionNorm : fraction;
-    assign expNorm = shift? aux_expNorm : exp;
+    reg count;
+
+    initial begin
+        count = 0;
+    end
+    always @(shift) begin
+        count = ~count;
+     fractionNorm <= (shift && ~count) ? aux_fractionNorm : fraction;
+     expNorm <= (shift && ~count) ? aux_expNorm : exp;
+
+    end
 
     
 

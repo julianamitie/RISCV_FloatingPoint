@@ -54,7 +54,6 @@ module bigALU(
                     sign_result = 1; 
                 end 
             endcase
-            MUL: 
             default: aux <= input_a + input_b;
         endcase
     end

@@ -14,7 +14,7 @@ module ucFloat (
     output reg alu
 );
 
-    
+    reg primeiro_shift;
 
     // Parametros de estado
     localparam [2:0] state0 =3'b000, // Iniciando
@@ -38,10 +38,12 @@ module ucFloat (
     always @(state) begin
         case (state) 
             state0: begin
+                shift = 0;
                 $display("######## state 0 ######## \n");
                 done = 0;
                 shift = 0;
                 alu = 0;
+                primeiro_shift = 1;
                 if(start == 1) next_state = state1; 
                 else next_state = state0;
             end 
@@ -73,11 +75,12 @@ module ucFloat (
             state3:begin
                 alu = 0;
                 $display("######## state 3 ########\n");
-                if(carry) begin
+                if(carry && primeiro_shift) begin
+                    primeiro_shift = 0;
                     $display("-> Há Carry");
                     shift = 1;
                     shift_src = 1;
-                    next_state = state3;
+                    next_state = state4;
                 end
                 else begin
                     if(fracResult[26] == 0) begin
@@ -89,15 +92,16 @@ module ucFloat (
                     else begin
                         // Se o resultado da alu estiver normalizado
                         // Normalizar o resultado do round
-                        shift = 0;
+                        shift = 1;
+                        shift_src = 0;
                         if(normalization_src == 1) begin
-                            next_state = state4;
+                            next_state = state5;
                             $display("-> Normalizado com src = 1");
 
                         end
                         else begin
                             normalization_src = 1;
-                            next_state = state5;
+                            next_state = state4;
                             $display("-> Normalizado com src = 0");
                         end
                     end
@@ -107,7 +111,6 @@ module ucFloat (
             state4: begin
                 $display("######## state 4 ######## \n");
                 shift = 0;
-                normalization_src = 0;
                 // Arredondamento
                 next_state = state3;
             end 
