@@ -10,6 +10,8 @@ module shiftRight(
     
     // shiftando o número num em shiftRightQtt casas
     always @(*) begin
+        $display("\n shiftRightQtt = %b", shiftRightQtt);
+        $display("\n num = %b", num);
          result = aux_result >> shiftRightQtt;
     end
     

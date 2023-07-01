@@ -3,9 +3,16 @@ module normalization(
     input shift_src, // 0 : left  1: right
     input [7:0] exp,
     input [26:0] fraction,
-    output  [7:0] expNorm,
-    output  [26:0] fractionNorm
+    output [7:0] expNorm,
+    output [26:0] fractionNorm
 );
+// always @(*) begin
+
+//         // $display("\n exp %d", exp);
+//         // $display("\n fraction %b", fraction);
+//         // $display("\n shift %d", shift);
+//         // $display("\n shiftttt %d", shift_src);
+//     end
     wire [7:0] aux_expNorm;
     wire [26:0] aux_fractionNorm;
 
@@ -15,7 +22,7 @@ module normalization(
     assign fractionNorm = shift ? aux_fractionNorm : fraction;
     assign expNorm = shift? aux_expNorm : exp;
 
-
+    
 
 
 endmodule

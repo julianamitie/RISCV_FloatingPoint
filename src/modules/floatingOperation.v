@@ -8,11 +8,11 @@ module floatingOperation(
     input normalization_src, // 0: Alu, 1: Roundresult
     input shift_src, // 0: left, 1: right
     input shift,
+    input alu,
     output [7:0] expDiff, 
     output [26:0] fracResult,
     output wire [31:0] result,
-    output wire carry 
-    
+    output wire carry
 );
     /*
     modelo:
@@ -59,7 +59,10 @@ module floatingOperation(
     // Smaller exponent multiplexer
     // 0 : expA  1: expB
     wire [7:0] smallerExp;
+    wire [7:0] biggerExp;
     assign smallerExp = smallerExpSrc ? expB : expA;
+    assign biggerExp = smallerExpSrc ? expA : expB;
+
 
     // Shift Fraction with smaller exponent
     // Multiplexer
@@ -80,15 +83,21 @@ module floatingOperation(
 
     wire [26:0] bigAluResult;
 
+    wire sign1, sign2;
+    assign sign1 = smallerExpSrc ? signA : signB;
+    assign sign2 = smallerExpSrc ? signB : signA;
+    wire sign_result;
     // Big alu
     bigALU bigAlu(
+        .alu(alu),
         .input_a(fracShifted),
-        .sign_a(signA),
+        .sign_a(sign1),
         .input_b({1'b1, num2, 3'b000}),
-        .sign_b(signB),
+        .sign_b(sign2),
         .operation(operation),
         .result(bigAluResult),
-        .carry(carry)
+        .carry(carry),
+        .sign_result(sign_result)
     );
 
     //Normalization multiplexer
@@ -99,11 +108,13 @@ module floatingOperation(
     assign fracResult = fractToNorm;
 
     wire [7:0] expToNorm;
-    assign expToNorm = normalization_src ? smallerExp : expRounded;
+    
+    assign expToNorm = normalization_src ? biggerExp : expRounded;
 
     // Normalization
     wire [26:0] fractionNorm;
     wire [7:0] expNorm;
+
 
     normalization normalization(
         .shift(shift),
@@ -131,7 +142,7 @@ module floatingOperation(
 
     // Final result
     // Verificar qual o sinal -> colocar como output da alu
-    assign result = {signA, expNorm, fractionNorm[26:4]};
+    assign result = {sign_result, expNorm, fractionNorm[25:3]};
     
 
 endmodule

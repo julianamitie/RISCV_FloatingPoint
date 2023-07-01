@@ -10,8 +10,11 @@ module ucFloat (
     output reg normalization_src,
     output reg shift_src,
     output reg shift,
-    output reg done
+    output reg done,
+    output reg alu
 );
+
+    
 
     // Parametros de estado
     localparam [2:0] state0 =3'b000, // Iniciando
@@ -38,6 +41,7 @@ module ucFloat (
                 $display("######## state 0 ######## \n");
                 done = 0;
                 shift = 0;
+                alu = 0;
                 if(start == 1) next_state = state1; 
                 else next_state = state0;
             end 
@@ -48,7 +52,7 @@ module ucFloat (
                 shift = 0;
                 if(expDiff[7] == 1) begin
                     smallerExpSrc = 0;
-                    shiftRightQtt = ~expDiff[6:0] + 1;
+                    shiftRightQtt = (~expDiff) + 1;
                 end
                 else begin
                     smallerExpSrc = 1;
@@ -60,12 +64,14 @@ module ucFloat (
             state2: begin
                 $display("######## state 2 ########\n");
                 shift = 0;
+                alu = 1;
                 // Somar as frações
                 
                 next_state = state3;
             end 
 
             state3:begin
+                alu = 0;
                 $display("######## state 3 ########\n");
                 if(carry) begin
                     $display("-> Há Carry");
@@ -78,14 +84,13 @@ module ucFloat (
                         $display("-> Não normalizado");
                         shift = 1;
                         shift_src = 0;
-                        next_state = state3;
+                        next_state = state4;
                     end
                     else begin
                         // Se o resultado da alu estiver normalizado
                         // Normalizar o resultado do round
                         shift = 0;
                         if(normalization_src == 1) begin
-                            
                             next_state = state4;
                             $display("-> Normalizado com src = 1");
 
@@ -101,8 +106,8 @@ module ucFloat (
 
             state4: begin
                 $display("######## state 4 ######## \n");
-                normalization_src = 0;
                 shift = 0;
+                normalization_src = 0;
                 // Arredondamento
                 next_state = state3;
             end 

@@ -14,6 +14,7 @@ wire [7:0] expDiff;
 wire carry;
 wire [26:0] fracResult;
 wire shift;
+wire alu;
 
 floatingOperation flop(
     .numA(A),
@@ -24,6 +25,7 @@ floatingOperation flop(
     .normalization_src(normalization_src),
     .shift_src(shift_src),
     .shift(shift),
+    .alu(alu),
     .expDiff(expDiff),
     .fracResult(fracResult),
     .result(R),
@@ -43,7 +45,8 @@ ucFloat ucf(
     .normalization_src(normalization_src), 
     .shift_src(shift_src),
     .shift(shift),
-    .done(done)
+    .done(done),
+    .alu(alu)
 ); 
 
 

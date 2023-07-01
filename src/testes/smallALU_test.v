@@ -15,8 +15,8 @@ module smallALU_test #(parameter N = 64) ();
 
     /* início do testbench */
     initial begin
-        exp1 = 8'b00000010;
-        exp2 = 8'b00000001;
+        exp1 = 8'b10000000;
+        exp2 = 8'b10000001;
 
         $monitor("exp1 = %B\n exp2 = %B\n exp = %B\n", exp1, exp2, exp);
         #100;
